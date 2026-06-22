@@ -57,15 +57,15 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <Mail className="h-4 w-4 text-emerald-500" />
-                <span>support@recipehub.com</span>
+                <span>Saad0174742@gmail.com</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <Phone className="h-4 w-4 text-emerald-500" />
-                <span>+1 (555) 019-2834</span>
+                <span>+88 01851-192657 </span>
               </li>
               <li className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <MapPin className="h-4 w-4 text-emerald-500" />
-                <span>123 Culinary Ave, Food City</span>
+                <span>Thakurgaon sadar, Thakurgaon</span>
               </li>
             </ul>
           </div>
@@ -80,7 +80,7 @@ export default function Footer() {
               <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl bg-zinc-150 border border-zinc-200 text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-400 transition-all">
                 <Send className="h-4 w-4" />
               </a>
-              <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl bg-zinc-150 border border-zinc-200 text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-400 transition-all">
+              <a href="/dashboard/favorites" className="h-9 w-9 flex items-center justify-center rounded-xl bg-zinc-150 border border-zinc-200 text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-400 transition-all">
                 <Heart className="h-4 w-4" />
               </a>
               <a href="#" className="h-9 w-9 flex items-center justify-center rounded-xl bg-zinc-150 border border-zinc-200 text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-emerald-950/20 dark:hover:text-emerald-400 transition-all">
