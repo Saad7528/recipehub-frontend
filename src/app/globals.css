@@ -1,37 +1,52 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #fafafa;
-  --foreground: #09090b;
-  --card: #ffffff;
-  --card-foreground: #09090b;
-  --border: #e4e4e7;
-  --ring: #10b981;
+  --theme-bg: #fdfcf9;
+  --theme-fg: #18181b;
+  --theme-card: #ffffff;
+  --theme-card-fg: #18181b;
+  --theme-border: #e2e8f0;
+  --theme-ring: #0f766e;
 }
 
-.dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #18181b;
-  --card-foreground: #fafafa;
-  --border: #27272a;
-  --ring: #34d399;
+:root.dark, .dark {
+  --theme-bg: #060c0a;
+  --theme-fg: #f2f5f4;
+  --theme-card: #0e1412;
+  --theme-card-fg: #f2f5f4;
+  --theme-border: #1a2421;
+  --theme-ring: #14b8a6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
+@theme {
+  --color-background: var(--theme-bg);
+  --color-foreground: var(--theme-fg);
+  --color-card: var(--theme-card);
+  --color-card-foreground: var(--theme-card-fg);
+  --color-border: var(--theme-border);
+  --color-ring: var(--theme-ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Legacy/Custom theme colors integration */
+  --color-zinc-150: #ececef;
+  --color-zinc-350: #bcbcc2;
+  --color-zinc-450: #8a8a93;
+  --color-zinc-455: #8a8a93;
+  --color-zinc-550: #606067;
+  --color-zinc-750: #333338;
+  --color-zinc-850: #202024;
+  --color-emerald-450: #0fb478;
+  --color-purple-655: #6d28d9;
+  --color-red-150: #fdd8d8;
+  --color-amber-250: #fde68a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--theme-bg) !important;
+  color: var(--theme-fg) !important;
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui;
 }
 
@@ -71,6 +86,6 @@ body {
 
 /* Input focus ring enhancements for accessibility */
 input:focus, select:focus, textarea:focus {
-  border-color: var(--ring);
+  border-color: var(--theme-ring);
 }
 
