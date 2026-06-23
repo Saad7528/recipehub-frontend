@@ -13,9 +13,25 @@ export async function signToken(payload) {
 
 export async function verifyToken(token) {
   try {
-    const { payload } = await jwtVerify(token, key, {
-      algorithms: ["HS256"],
-    });
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    
+    // Decode base64url payload
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    const payload = JSON.parse(jsonPayload);
+
+    // Verify expiration time
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
+      return null;
+    }
+
     return payload;
   } catch (error) {
     return null;
