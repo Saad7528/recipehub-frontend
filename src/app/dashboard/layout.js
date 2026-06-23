@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import {
   LayoutDashboard,
@@ -25,7 +25,14 @@ import {
 export default function DashboardLayout({ children }) {
   const { user, loading } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push(`/login?redirect=${pathname}`);
+    }
+  }, [user, loading, router, pathname]);
 
   if (loading) {
     return (
