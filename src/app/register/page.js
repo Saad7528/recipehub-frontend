@@ -4,12 +4,22 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import { Mail, Lock, User, Upload, Compass, Loader2, AlertCircle } from "lucide-react";
 import confetti from "canvas-confetti";
 
 export default function RegisterPage() {
+  return (
+    <>
+      <Script src="https://accounts.google.com/gsi/client" strategy="lazyOnload" />
+      <RegisterForm />
+    </>
+  );
+}
+
+function RegisterForm() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
 
   useEffect(() => {
     document.title = "Sign Up | RecipeHub";
@@ -26,6 +36,74 @@ export default function RegisterPage() {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const handleCredentialResponse = async (response) => {
+    try {
+      setLoading(true);
+      setErrorMsg("");
+      const credential = response.credential;
+      const base64Url = credential.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('0' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      const decoded = JSON.parse(jsonPayload);
+      
+      const result = await loginWithGoogle(
+        decoded.name,
+        decoded.email,
+        decoded.picture,
+        "/dashboard"
+      );
+      
+      if (result.success) {
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      } else {
+        setErrorMsg(result.error || "Google registration failed");
+      }
+    } catch (err) {
+      console.error("GSI Register Error:", err);
+      setErrorMsg("Google Authentication failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initButton = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "370824720428-ha23fdbd9ctiqg6eauhquejek19utqo0.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+        const buttonDiv = document.getElementById("google-signup-button");
+        if (buttonDiv) {
+          window.google.accounts.id.renderButton(
+            buttonDiv,
+            { 
+              theme: document.documentElement.classList.contains("dark") ? "filled_black" : "outline", 
+              size: "large", 
+              width: "100%",
+              text: "signup_with",
+              shape: "pill"
+            }
+          );
+        }
+      }
+    };
+
+    if (window.google) {
+      initButton();
+    } else {
+      const interval = setInterval(() => {
+        if (window.google) {
+          initButton();
+          clearInterval(interval);
+        }
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -199,7 +277,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/10 hover:bg-emerald-500 flex items-center justify-center gap-2 disabled:opacity-85"
+            className="w-full rounded-2xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/10 hover:bg-emerald-50 flex items-center justify-center gap-2 disabled:opacity-85"
           >
             {loading ? (
               <>
@@ -213,6 +291,16 @@ export default function RegisterPage() {
             )}
           </button>
         </form>
+
+        {/* Real Google Register Button */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-150 dark:border-zinc-800" /></div>
+          <div className="relative flex justify-center text-3xs font-bold uppercase"><span className="bg-white px-2 text-zinc-400 dark:bg-zinc-900">Or sign up with</span></div>
+        </div>
+
+        <div className="mb-6">
+          <div id="google-signup-button" className="w-full flex justify-center min-h-[44px]" />
+        </div>
 
         <p className="mt-8 text-center text-xs text-zinc-400">
           Already have an account?{" "}
